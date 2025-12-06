@@ -32,6 +32,9 @@ const getWeather = async (id) => {
   const data = await res.json()
 
   emit('place-data', data)
+
+  searchTerm.query = ''
+  searchTerm.results = null
 }
 </script>
 
@@ -40,7 +43,7 @@ const getWeather = async (id) => {
     <!-- search field -->
     <form>
       <div class="bg-white border border-indigo-600/30 rounded-lg shadow-lg flex items-center">
-        <i class="fa-solid fa-magnifying-glass p-2 text-indigo-600"></i>
+        <i class="fa-solid fa-magnifying-glass p-2 text-indigo-600 mr-3"></i>
         <input
           type="text"
           placeholder="Search for a place"
