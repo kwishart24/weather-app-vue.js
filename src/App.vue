@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import SearchInput from './components/SearchInput.vue'
 import WeatherCard from './components/WeatherCard.vue'
+import BarChart from './components/BarChart.vue'
 
 const places = ref([])
 
@@ -39,7 +40,19 @@ const deletePlace = (name) => {
         <WeatherCard :place="place" @delete-place="deletePlace" />
       </div>
     </div>
+
+    <!-- Bar Chart -->
+    <div class="container">
+      <BarChart/>
+    </div>
+
   </main>
 </template>
 
-<style scoped></style>
+<style scoped>
+  .container {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+</style>
