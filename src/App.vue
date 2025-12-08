@@ -2,7 +2,8 @@
 import { ref } from 'vue'
 import SearchInput from './components/SearchInput.vue'
 import WeatherCard from './components/WeatherCard.vue'
-import HourlyChart from './components/HourlyChart.vue'
+// import HourlyChart from './components/HourlyChart.vue'
+// import ForecastTable from './components/ForecastTable.vue'
 
 const places = ref([])
 
@@ -11,9 +12,10 @@ const addPlace = (data) => {
 }
 
 const deletePlace = (name) => {
-  if (confirm('Are you sure?')) {places.value = places.value.filter(p => p.location.name !== name)}
+  if (confirm('Are you sure?')) {
+    places.value = places.value.filter((p) => p.location.name !== name)
+  }
 }
-
 </script>
 
 <template>
@@ -41,17 +43,11 @@ const deletePlace = (name) => {
         <WeatherCard :place="place" @delete-place="deletePlace" />
       </div>
     </div>
-
-    <!-- Hourly Chart -->
-    <div class="container">
-      <HourlyChart/>
-    </div>
-
   </main>
 </template>
 
 <style scoped>
-  /* .container {
+/* .container {
     display: flex;
     flex-direction: column;
     gap: 1rem;
