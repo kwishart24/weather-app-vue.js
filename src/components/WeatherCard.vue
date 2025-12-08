@@ -3,6 +3,8 @@ import { ref } from 'vue'
 import BorderLine from './BorderLine.vue'
 import WeatherForecastDay from './WeatherForecastDay.vue'
 import WeatherInfo from './WeatherInfo.vue'
+import HourlyChart from './HourlyChart.vue'
+import ForecastTable from './ForecastTable.vue'
 
 defineProps({
   place: Object,
@@ -19,7 +21,10 @@ const removePlace = (placeName) => {
 </script>
 
 <template>
-  <div :class="place.current.is_day === 1 ? 'bg-day' : 'bg-night'" class="text-white p-10 rounded-lg shadow-lg gap-6 mb-6 relative overflow-hidden">
+  <div
+    :class="place.current.is_day === 1 ? 'bg-day' : 'bg-night'"
+    class="text-white p-10 rounded-lg shadow-lg gap-6 mb-6 relative overflow-hidden"
+  >
     <!-- Location & time -->
     <div class="mb-2 flex justify-between items-center">
       <div class="flex items-center justify-center gap-2">
@@ -29,8 +34,11 @@ const removePlace = (placeName) => {
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-clock"></i>
         <h1 class="text-3xl">
-          {{ new Date(place.location.localtime).getHours() }}:{{
-            new Date(place.location.localtime).getMinutes()
+          {{
+            new Date(place.location.localtime).toLocaleString('en-US', {
+              hour: '2-digit',
+              minute: '2-digit',
+            })
           }}
         </h1>
       </div>
@@ -66,6 +74,19 @@ const removePlace = (placeName) => {
       <button @click="showDetail = true">
         More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
       </button>
+    </div>
+
+    <!-- hourly charts -->
+    <div v-show="showDetail">
+      <HourlyChart
+        v-if="place.forecast && place.forecast.forecastday.length"
+        :day="place.forecast.forecastday[0]"
+      />
+    </div>
+
+    <!-- forecast table -->
+    <div class="g-white/10 rounded-lg p-4 mt-6" v-show="showDetail">
+      <ForecastTable :days="place.forecast.forecastday" />
     </div>
   </div>
 </template>
