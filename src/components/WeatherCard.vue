@@ -1,14 +1,16 @@
 <script setup>
 import { ref } from 'vue'
-import BorderLine from './BorderLine.vue'
-import WeatherForecastDay from './WeatherForecastDay.vue'
+// import BorderLine from './BorderLine.vue'
+// import WeatherForecastDay from './WeatherForecastDay.vue'
+import ForecastNav from './ForecastNav.vue'
 import WeatherInfo from './WeatherInfo.vue'
 import HourlyChart from './HourlyChart.vue'
 import ForecastTable from './ForecastTable.vue'
 
-defineProps({
-  place: Object,
-})
+
+const activeSection = ref('today')
+defineProps({ place: Object })
+
 
 const emit = defineEmits(['delete-place'])
 
@@ -44,19 +46,38 @@ const removePlace = (placeName) => {
       </div>
     </div>
 
+    <!-- Navigation -->
+    <div>
+      <ForecastNav v-model="activeSection" />
+
+      <!-- Section content -->
+      <div class="mt-8">
+        <div v-if="activeSection === 'today'">
+          <!-- Today’s weather summary -->
+        </div>
+
+        <div v-if="activeSection === 'hourly'">
+          <HourlyChart :day="place.forecast.forecastday[0]" />
+        </div>
+
+        <div v-if="activeSection === 'fiveDay'">
+          <ForecastTable :days="place.forecast.forecastday" :tzId="place.location.tz_id" />
+        </div>
+      </div>
+    </div>
+
     <!-- current weather -->
-    <div class="text-center flex-1">
+    <div v-if="activeSection === 'today'" class="text-center flex-1">
       <img :src="place.current.condition.icon" alt="icon" width="200" class="mx-auto -mb-10" />
-      <h1 class="text-9xl mb-2 mr-4">{{ Math.round(place.current.temp_c) }}&deg;</h1>
+      <h1 class="text-9xl mb-2 ml-8">{{ Math.round(place.current.temp_f) }}&deg;</h1>
+      <h6 class="text-2xl mb-2">{{ Math.round(place.forecast.forecastday[0].day.maxtemp_f) }}&deg;F / {{ Math.round(place.forecast.forecastday[0].day.mintemp_f) }}&deg;F</h6>
       <p class="text-2xl">{{ place.current.condition.text }}</p>
     </div>
 
-    <BorderLine />
-
-    <!-- forecast -->
+    <!-- forecast
     <div v-for="(day, idx) in place.forecast.forecastday" :key="idx">
       <WeatherForecastDay :day="day" />
-    </div>
+    </div> -->
 
     <!-- info -->
     <Transition name="fade">
@@ -70,24 +91,19 @@ const removePlace = (placeName) => {
     </Transition>
 
     <!-- forecast btn -->
-    <div class="flex justify-end items-center gap-1 mt-10">
+    <div v-if="activeSection === 'today'" class="flex justify-end items-center gap-1 mt-10">
       <button @click="showDetail = true">
         More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
       </button>
     </div>
 
     <!-- hourly charts -->
-    <div v-show="showDetail">
+    <!-- <div v-show="showDetail">
       <HourlyChart
         v-if="place.forecast && place.forecast.forecastday.length"
         :day="place.forecast.forecastday[0]"
       />
-    </div>
-
-    <!-- forecast table -->
-    <div class="g-white/10 rounded-lg p-4 mt-6" v-show="showDetail">
-      <ForecastTable :days="place.forecast.forecastday" />
-    </div>
+    </div> -->
   </div>
 </template>
 

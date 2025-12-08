@@ -39,7 +39,8 @@ const chartData = ref({
         label: 'Hourly Temperature (°F)',
         type: 'line',
         data: [],
-        backgroundColor: 'rgba(54, 73, 93, .5)',
+        //backgroundColor: 'rgba(54, 73, 93, 0)',
+        backgroundColor: 'rgba(9, 122, 243, 0.36)',
         borderColor: '#36495d',
         borderWidth: 3,
       },
@@ -87,6 +88,10 @@ watch(
 
 <template>
   <div>
-    <Chart v-if="chartData.data.labels.length" :data="chartData.data" :options="chartData.options" />
+    <Chart
+      v-if="chartData.data.labels.length"
+      :data="chartData.data"
+      :options="chartData.options"
+    />
   </div>
 </template>
