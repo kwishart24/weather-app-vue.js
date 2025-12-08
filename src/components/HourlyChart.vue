@@ -57,6 +57,10 @@ const chartData = ref({
   options: {
     responsive: true,
     maintainAspectRatio: false,
+    scales: {
+    x: { ticks: { color: '#fff' } },
+    y: { ticks: { color: '#fff' } }
+  }
   },
 })
 

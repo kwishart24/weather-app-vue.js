@@ -9,7 +9,7 @@ defineProps({
     class="absolute bg-white/80 backdrop-blur-sm text-slate-900 inset-x-0 bottom-0 rounded-t-lg p-8"
   >
     <!-- Close button -->
-    <div class="flex justify-end mb-2">
+    <div class="flex justify-end mb-5">
       <button @click="$emit('close-info')" class="p-1">
         <i class="fa-solid fa-xmark text-xl"></i>
       </button>
