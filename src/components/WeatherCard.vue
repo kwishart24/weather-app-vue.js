@@ -20,6 +20,7 @@ const backgroundClass = computed(() => {
   if (text.includes('sun')) return 'bg-sunny'
   if (text.includes('cloud')) return 'bg-cloudy'
   if (text.includes('rain')) return 'bg-rainy'
+  if (text.includes('drizzle')) return 'bg-rainy'
   if (text.includes('snow')) return 'bg-snow'
 
   return props.place.current.is_day === 1 ? 'bg-day' : 'bg-night'
@@ -89,9 +90,7 @@ const removePlace = (placeName) => {
 
       <!-- Hourly -->
       <div v-if="activeSection === 'hourly'" class="w-full flex items-center justify-center">
-        <div class="flex-1 flex items-center justify-center">
           <HourlyChart :day="place.forecast.forecastday[0]" class="max-w-[7/8]] max-h-[4/5]" />
-        </div>
       </div>
 
       <!-- 5-Day -->
@@ -137,6 +136,7 @@ const removePlace = (placeName) => {
 }
 .bg-rainy {
   background-image: url('public/images/rainy.png');
+  color: #ffff;
 }
 .bg-snow {
   background-image: url('public/images/snow.png');
