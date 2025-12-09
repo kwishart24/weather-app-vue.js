@@ -114,6 +114,13 @@ const removePlace = (placeName) => {
     ]"
     class="min-h-[700px]"
   >
+    <!-- Favorites Button -->
+    <div class="flex justify-start mb-1">
+      <button @click="$emit('save-favorite', place)" class="p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+        <i class="fa-solid fa-bookmark"></i> Save
+      </button>
+    </div>
+
     <!-- Header -->
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
       <!-- Location & time -->
@@ -135,7 +142,7 @@ const removePlace = (placeName) => {
     </div>
 
     <!-- Navigation -->
-    <ForecastNav v-model="activeSection" :class="navTextClass" class="mb-8"/>
+    <ForecastNav v-model="activeSection" :class="navTextClass" class="mb-8" />
 
     <!-- Section content -->
     <div class="flex flex items-center justify-center">
@@ -179,7 +186,7 @@ const removePlace = (placeName) => {
       </div>
     </div>
 
-    <!-- Footer info -->
+    <!-- weather info card -->
     <Transition name="fade">
       <div v-show="showDetail">
         <WeatherInfo
@@ -190,7 +197,9 @@ const removePlace = (placeName) => {
       </div>
     </Transition>
 
-    <!-- forecast btn -->
+    <!-- Footer buttons -->
+    <div class="mt-auto flex justify-between items-center pt-6">
+    <!-- weather info btn -->
     <div v-if="activeSection === 'today'" class="absolute bottom-4 left-4 p-2">
       <button @click="showDetail = true">
         More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
@@ -202,6 +211,7 @@ const removePlace = (placeName) => {
       <button @click="removePlace(place.location.name)">
         <i class="fa-solid fa-trash"></i>
       </button>
+    </div>
     </div>
     <!-- hourly charts -->
     <!-- <div v-show="showDetail">
