@@ -27,6 +27,14 @@ ChartJS.register(
 
 const props = defineProps({
   day: Object,
+  labelColor: {
+    type: String,
+    default: '#ffffff',
+  },
+  lineColors: {
+    type: String,
+    default: '#64748b',
+  }
 })
 
 const loaded = ref(false)
@@ -39,9 +47,8 @@ const chartData = ref({
         label: 'Hourly Temperature (°F)',
         type: 'line',
         data: [],
-        //backgroundColor: 'rgba(54, 73, 93, 0)',
-        backgroundColor: 'rgba(9, 122, 243, 0.36)',
-        borderColor: '#36495d',
+        backgroundColor: props.lineColors.background,
+        borderColor: props.lineColors.border,
         borderWidth: 3,
       },
       {
@@ -57,10 +64,29 @@ const chartData = ref({
   options: {
     responsive: true,
     maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        labels: {
+          color: props.labelColor, // 👈 legend font color for dataset labels
+          font: {
+            size: 14,
+            weight: 'bold',
+          },
+        },
+      },
+    },
     scales: {
-    x: { ticks: { color: '#fff' } },
-    y: { ticks: { color: '#fff' } }
-  }
+      x: { ticks: { 
+        color: props.labelColor, 
+        font: {
+          weight: 'bold'
+        } } },
+      y: { ticks: { 
+        color: props.labelColor, 
+        font: {
+          weight: 'bold'
+        } } },
+    },
   },
 })
 

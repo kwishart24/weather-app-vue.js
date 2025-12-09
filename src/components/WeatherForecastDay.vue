@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="mb-2 flex items-center justify-between">
+  <div class="mb-2 flex items-center justify-between font-bold">
     <table class="w-full">
       <tr>
         <!-- day of the week -->
@@ -18,7 +18,7 @@ defineProps({
 
         <!-- high/low temp -->
         <td class="w-1/3 text-right">
-          {{ Math.round(day.day.maxtemp_c) }} / {{ Math.round(day.day.mintemp_c) }}
+          {{ Math.round(day.day.maxtemp_f) }} / {{ Math.round(day.day.mintemp_f) }}
         </td>
       </tr>
     </table>

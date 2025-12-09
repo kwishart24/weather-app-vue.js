@@ -71,9 +71,7 @@ defineProps({
           })
         }}
       </h3>
-      <button @click="$emit('remove-place')">
-        <i class="fa-solid fa-trash"></i>
-      </button>
+      
     </div>
   </div>
 </template>

@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
 // import BorderLine from './BorderLine.vue'
-// import WeatherForecastDay from './WeatherForecastDay.vue'
+import WeatherForecastDay from './WeatherForecastDay.vue'
 import ForecastNav from './ForecastNav.vue'
 import WeatherInfo from './WeatherInfo.vue'
 import HourlyChart from './HourlyChart.vue'
-import ForecastTable from './ForecastTable.vue'
+// import ForecastTable from './ForecastTable.vue'
 import { computed } from 'vue'
 
 const activeSection = ref('today')
@@ -14,6 +14,7 @@ const props = defineProps({
   place: Object,
 })
 
+// Dynamic background image
 const backgroundClass = computed(() => {
   const text = props.place.current.condition.text.toLowerCase()
 
@@ -24,6 +25,70 @@ const backgroundClass = computed(() => {
   if (text.includes('snow')) return 'bg-snow'
 
   return props.place.current.is_day === 1 ? 'bg-day' : 'bg-night'
+})
+
+// Dynamic navigation color based on background image
+const navTextClass = computed(() => {
+  switch (backgroundClass.value) {
+    case 'bg-day':
+    case 'bg-sunny':
+    case 'bg-cloudy':
+    case 'bg-snow':
+      return 'text-gray-900' // dark text for light backgrounds
+    case 'bg-night':
+    case 'bg-rainy':
+      return 'text-white' // light text for dark backgrounds
+    default:
+      return 'text-white'
+  }
+})
+
+// Dynamic chart labels based on background image
+const chartLabelColor = computed(() => {
+  switch (backgroundClass.value) {
+    case 'bg-day':
+    case 'bg-sunny':
+    case 'bg-cloudy':
+    case 'bg-snow':
+      return '#000000' // dark text for light backgrounds
+    case 'bg-night':
+    case 'bg-rainy':
+      return '#ffffff' // light text for dark backgrounds
+    default:
+      return '#ffffff'
+  }
+})
+
+// Dynamic Line chart lines based on background image
+const chartColors = computed(() => {
+  switch (backgroundClass.value) {
+    case 'bg-day':
+    case 'bg-sunny':
+    case 'bg-cloudy':
+    case 'bg-snow':
+      return { border: '#1c1c1c', background: 'rgba(28, 28, 28, 1)' } // dark text for light backgrounds
+    case 'bg-night':
+    case 'bg-rainy':
+      return { border: '#ffffff', background: 'rgba(255, 255, 255, 1)' } // light text for dark backgrounds
+    default:
+      return { border: '#64748b', background: 'rgba(100, 116, 139, 1)' } // light text for dark backgrounds
+  }
+})
+
+// Dynamic 5-Day Forecast font colior based on background image
+const tableTextClass = computed(() => {
+  switch (backgroundClass.value) {
+    case 'bg-day':
+    case 'bg-sunny':
+    case 'bg-cloudy':
+    case 'bg-snow':
+      return 'text-gray-900' // dark text for light backgrounds
+    case 'bg-night':
+    case 'bg-rainy':
+      return 'text-white' // light text for dark backgrounds
+    default:
+      return 'text-white'
+  }
 })
 
 const emit = defineEmits(['delete-place'])
@@ -50,7 +115,7 @@ const removePlace = (placeName) => {
     class="min-h-[700px]"
   >
     <!-- Header -->
-    <div class="mb-2 flex justify-between items-center">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
       <!-- Location & time -->
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-location-dot"></i>
@@ -70,10 +135,10 @@ const removePlace = (placeName) => {
     </div>
 
     <!-- Navigation -->
-    <ForecastNav v-model="activeSection" />
+    <ForecastNav v-model="activeSection" :class="navTextClass" class="mb-8"/>
 
     <!-- Section content -->
-    <div class="flex-1 flex items-center justify-center">
+    <div class="flex flex items-center justify-center">
       <!-- Today -->
       <div v-if="activeSection === 'today'" class="text-center">
         <!-- current weather -->
@@ -90,12 +155,27 @@ const removePlace = (placeName) => {
 
       <!-- Hourly -->
       <div v-if="activeSection === 'hourly'" class="w-full flex items-center justify-center">
-          <HourlyChart :day="place.forecast.forecastday[0]" class="max-w-[7/8]] max-h-[4/5]" />
+        <HourlyChart
+          :day="place.forecast.forecastday[0]"
+          class="w-4/5 max-w-[1000px]"
+          :labelColor="chartLabelColor"
+          :lineColors="chartColors"
+        />
       </div>
 
       <!-- 5-Day -->
-      <div v-if="activeSection === 'fiveDay'" class="w-full flex items-center justify-center">
-        <ForecastTable :days="place.forecast.forecastday" :tzId="place.location.tz_id" />
+      <div v-if="activeSection === 'fiveDay'" class="w-full">
+        <div class="grid grid-rows-5 gap-8">
+          <WeatherForecastDay
+            v-for="(day, index) in place.forecast.forecastday.slice(0, 5)"
+            :key="day.date"
+            :day="day"
+            :index="index"
+            :textClass="tableTextClass"
+          />
+        </div>
+        <!-- <div v-if="activeSection === 'fiveDay'" class="w-full flex items-center justify-center"> -->
+        <!-- <ForecastTable :days="place.forecast.forecastday" :tzId="place.location.tz_id" :textClass="tableTextClass"/> -->
       </div>
     </div>
 
@@ -111,12 +191,18 @@ const removePlace = (placeName) => {
     </Transition>
 
     <!-- forecast btn -->
-    <div v-if="activeSection === 'today'" class="flex justify-end items-center gap-1 mt-10">
+    <div v-if="activeSection === 'today'" class="absolute bottom-4 left-4 p-2">
       <button @click="showDetail = true">
         More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
       </button>
     </div>
 
+    <!-- Trashcan button -->
+    <div class="absolute bottom-4 right-4 p-2 hover:bg-white/50">
+      <button @click="removePlace(place.location.name)">
+        <i class="fa-solid fa-trash"></i>
+      </button>
+    </div>
     <!-- hourly charts -->
     <!-- <div v-show="showDetail">
       <HourlyChart
