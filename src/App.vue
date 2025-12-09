@@ -4,8 +4,11 @@ import SearchInput from './components/SearchInput.vue'
 import WeatherCard from './components/WeatherCard.vue'
 // import HourlyChart from './components/HourlyChart.vue'
 // import ForecastTable from './components/ForecastTable.vue'
+import FavoritesList from './components/FavoritesList.vue'
 
 const places = ref([])
+const favorites = ref([])
+const showSidebar = ref(false)
 
 const addPlace = (data) => {
   places.value.push(data)
@@ -16,10 +19,42 @@ const deletePlace = (name) => {
     places.value = places.value.filter((p) => p.location.name !== name)
   }
 }
+
+//Save location to favorites
+const saveFavorite = (place) => {
+  if (!favorites.value.find((f) => f.location.name === place.location.name)) {
+    favorites.value.push(place)
+    alert(`${place.location.name} has been saved to favorites!`)
+  }
+}
+
+// 👉 When user clicks a favorite in the sidebar
+const selectFavorite = (fav) => {
+  // Remove any existing card for this location
+  places.value = places.value.filter((p) => p.location.name !== fav.location.name)
+  // Add it back to the top
+  places.value.unshift(fav)
+  // Close sidebar
+  showSidebar.value = false
+}
+
+const deleteFavorite = (name) => {
+  favorites.value = favorites.value.filter((f) => f.location.name !== name)
+}
 </script>
 
 <template>
   <main>
+    <!-- Favorites Button -->
+    <div class="flex justify-end p-2">
+      <button
+        @click="showSidebar = true"
+        class="p-4 font-bold rounded-md transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
+      >
+        <i class="fa-solid fa-bookmark"></i>Favorites
+      </button>
+    </div>
+
     <!-- Date -->
     <div class="text-center mb-6">
       {{
@@ -40,16 +75,31 @@ const deletePlace = (name) => {
     <!-- Weather Cards -->
     <div class="grid gap-6 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="(place, idx) in places" :key="idx">
-        <WeatherCard :place="place" @delete-place="deletePlace" />
+        <WeatherCard :place="place" @delete-place="deletePlace" @save-favorite="saveFavorite" />
       </div>
     </div>
+
+    <!-- Favorites List -->
+    <aside>
+      <FavoritesList
+        v-if="showSidebar"
+        :favorites="favorites"
+        :showSidebar="showSidebar"
+        @close="showSidebar = false"
+        @select-favorite="selectFavorite"
+        @delete-favorite="deleteFavorite"
+      />
+    </aside>
   </main>
 </template>
 
 <style scoped>
-/* .container {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  } */
+.slide-enter-active,
+.slide-leave-active {
+  transition: transform 0.3s ease;
+}
+.slide-enter-from,
+.slide-leave-to {
+  transform: translateX(100%);
+}
 </style>
