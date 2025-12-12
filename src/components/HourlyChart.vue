@@ -10,6 +10,7 @@ import {
   CategoryScale,
   LinearScale,
   LineController,
+  BarController,
 } from 'chart.js'
 import { Chart } from 'vue-chartjs'
 import { ref } from 'vue'
@@ -25,6 +26,7 @@ ChartJS.register(
   Tooltip,
   Legend,
   LineController,
+  BarController,
 )
 
 const props = defineProps({
