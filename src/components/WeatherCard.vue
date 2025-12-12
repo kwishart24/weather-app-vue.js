@@ -1,11 +1,9 @@
 <script setup>
 import { ref } from 'vue'
-// import BorderLine from './BorderLine.vue'
 import WeatherForecastDay from './WeatherForecastDay.vue'
 import ForecastNav from './ForecastNav.vue'
 import WeatherInfo from './WeatherInfo.vue'
 import HourlyChart from './HourlyChart.vue'
-// import ForecastTable from './ForecastTable.vue'
 import { computed } from 'vue'
 
 const activeSection = ref('today')
@@ -228,17 +226,17 @@ const removePlace = (placeName) => {
 
 <style scoped>
 .bg-sunny {
-  background-image: url('./src/images/sunny.png');
+  background-image: url('@/assets/images/sunny.png');
 }
 .bg-cloudy {
-  background-image: url('./src/images/cloudy_500.png');
+  background-image: url('@/assets/images/cloudy_500.png');
 }
 .bg-rainy {
-  background-image: url('./src/images/rainy.png');
+  background-image: url('@/assets/images/rainy.png');
   color: #ffff;
 }
 .bg-snow {
-  background-image: url('./src/images/snow.png');
+  background-image: url('@/assets/images/snow.png');
 }
 
 .bg-day {
