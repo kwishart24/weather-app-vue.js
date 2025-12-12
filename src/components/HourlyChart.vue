@@ -17,14 +17,14 @@ import { ref } from 'vue'
 import { watch } from 'vue'
 
 ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  BarElement,
-  LineElement,
-  PointElement,
   Title,
   Tooltip,
   Legend,
+  BarElement,
+  LineElement,
+  PointElement,
+  CategoryScale,
+  LinearScale,
   LineController,
   BarController,
 )
