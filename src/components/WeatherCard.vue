@@ -228,17 +228,17 @@ const removePlace = (placeName) => {
 
 <style scoped>
 .bg-sunny {
-  background-image: url('public/images/sunny.png');
+  background-image: url('images/sunny.png');
 }
 .bg-cloudy {
-  background-image: url('public/images/cloudy_500.png');
+  background-image: url('images/cloudy_500.png');
 }
 .bg-rainy {
-  background-image: url('public/images/rainy.png');
+  background-image: url('images/rainy.png');
   color: #ffff;
 }
 .bg-snow {
-  background-image: url('public/images/snow.png');
+  background-image: url('images/snow.png');
 }
 
 .bg-day {
