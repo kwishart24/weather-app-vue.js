@@ -32,9 +32,9 @@ const props = defineProps({
     default: '#ffffff',
   },
   lineColors: {
-    type: String,
-    default: '#64748b',
-  }
+    type: Object,
+    default: () => ({ background: '#64748b', border: '#64748b' }),
+  },
 })
 
 const loaded = ref(false)
@@ -76,16 +76,22 @@ const chartData = ref({
       },
     },
     scales: {
-      x: { ticks: { 
-        color: props.labelColor, 
-        font: {
-          weight: 'bold'
-        } } },
-      y: { ticks: { 
-        color: props.labelColor, 
-        font: {
-          weight: 'bold'
-        } } },
+      x: {
+        ticks: {
+          color: props.labelColor,
+          font: {
+            weight: 'bold',
+          },
+        },
+      },
+      y: {
+        ticks: {
+          color: props.labelColor,
+          font: {
+            weight: 'bold',
+          },
+        },
+      },
     },
   },
 })

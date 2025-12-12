@@ -116,7 +116,10 @@ const removePlace = (placeName) => {
   >
     <!-- Favorites Button -->
     <div class="flex justify-start mb-1">
-      <button @click="$emit('save-favorite', place)" class="p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer">
+      <button
+        @click="$emit('save-favorite', place)"
+        class="p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
+      >
         <i class="fa-solid fa-bookmark"></i> Save
       </button>
     </div>
@@ -199,19 +202,19 @@ const removePlace = (placeName) => {
 
     <!-- Footer buttons -->
     <div class="mt-auto flex justify-between items-center pt-6">
-    <!-- weather info btn -->
-    <div v-if="activeSection === 'today'" class="absolute bottom-4 left-4 p-2">
-      <button @click="showDetail = true">
-        More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
-      </button>
-    </div>
+      <!-- weather info btn -->
+      <div v-if="activeSection === 'today'" class="absolute bottom-4 left-4 p-2">
+        <button @click="showDetail = true">
+          More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
+        </button>
+      </div>
 
-    <!-- Trashcan button -->
-    <div class="absolute bottom-4 right-4 p-2 hover:bg-white/50">
-      <button @click="removePlace(place.location.name)">
-        <i class="fa-solid fa-trash"></i>
-      </button>
-    </div>
+      <!-- Trashcan button -->
+      <div class="absolute bottom-4 right-4 p-2 hover:bg-white/50">
+        <button @click="removePlace(place.location.name)">
+          <i class="fa-solid fa-trash"></i>
+        </button>
+      </div>
     </div>
     <!-- hourly charts -->
     <!-- <div v-show="showDetail">
