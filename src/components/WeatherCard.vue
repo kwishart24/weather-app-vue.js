@@ -110,7 +110,7 @@ const removePlace = (placeName) => {
       backgroundClass,
       'bg-cover bg-center transition-all duration-500 p-6 rounded-lg shadow-lg gap-6 mt-5 mb-0 relative overflow-hidden flex flex-col',
     ]"
-    class="min-h-[700px]"
+    class="h-[675px] sm:h-[700px] md:h-[725px] lg:h-[750px]"
   >
     <!-- Favorites Button -->
     <div class="flex justify-start mb-1">
@@ -127,13 +127,13 @@ const removePlace = (placeName) => {
       <!-- Location & time -->
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-location-dot"></i>
-        <h1 class="text-3xl break-words text-center">
+        <h1 class="break-words text-left line-clamp-2">
           {{ place.location.name }}
         </h1>
       </div>
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-clock"></i>
-        <h1 class="text-3xl break-words text-center">
+        <h1 class="break-words text-left">
           {{
             new Date(place.location.localtime).toLocaleString('en-US', {
               hour: '2-digit',
@@ -154,7 +154,9 @@ const removePlace = (placeName) => {
         <!-- current weather -->
         <div v-if="activeSection === 'today'" class="text-center">
           <img :src="place.current.condition.icon" alt="icon" class="w-32 mx-auto -mb-4" />
-          <h1 class="text-9xl mb-2 ml-8">{{ Math.round(place.current.temp_f) }}&deg;</h1>
+          <h1 class="text-6xl sm:text-8xl md:text-9xl mb-2 ml-2">
+            {{ Math.round(place.current.temp_f) }}&deg;
+          </h1>
           <h6 class="text-2xl mb-2">
             {{ Math.round(place.forecast.forecastday[0].day.maxtemp_f) }}&deg;F /
             {{ Math.round(place.forecast.forecastday[0].day.mintemp_f) }}&deg;F
@@ -175,7 +177,7 @@ const removePlace = (placeName) => {
 
       <!-- 5-Day -->
       <div v-if="activeSection === 'fiveDay'" class="w-full">
-        <div class="grid grid-rows-5 gap-8">
+        <div class="grid grid-rows-5 gap-4 sm:gap-8 text-sm sm:text-base">
           <WeatherForecastDay
             v-for="(day, index) in place.forecast.forecastday.slice(0, 5)"
             :key="day.date"
@@ -201,19 +203,21 @@ const removePlace = (placeName) => {
     </Transition>
 
     <!-- Footer buttons -->
-    <div class="mt-auto flex justify-between items-center pt-6">
+    <div class="mt-auto flex justify-between items-center pt-4">
       <!-- weather info btn -->
-      <div v-if="activeSection === 'today'" class="absolute bottom-4 left-4 p-2">
+      <div v-if="activeSection === 'today'" class="p-2">
         <button @click="showDetail = true">
           More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
         </button>
       </div>
 
       <!-- Trashcan button -->
-      <div class="absolute bottom-4 right-4 p-2 hover:bg-white/50">
-        <button @click="removePlace(place.location.name)">
-          <i class="fa-solid fa-trash"></i>
-        </button>
+      <div class="flex justify-end items-center ml-auto">
+        <div class="p-2 hover:bg-white/50">
+          <button @click="removePlace(place.location.name)">
+            <i class="fa-solid fa-trash"></i>
+          </button>
+        </div>
       </div>
     </div>
     <!-- hourly charts -->

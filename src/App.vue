@@ -11,7 +11,7 @@ const favorites = ref([])
 const showSidebar = ref(false)
 
 const addPlace = (data) => {
-  places.value.push(data)
+  places.value.unshift(data)
 }
 
 const deletePlace = (name) => {
