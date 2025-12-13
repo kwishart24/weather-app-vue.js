@@ -127,13 +127,13 @@ const removePlace = (placeName) => {
       <!-- Location & time -->
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-location-dot"></i>
-        <h1 class="break-words text-left line-clamp-2">
+        <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left line-clamp-2">
           {{ place.location.name }}
         </h1>
       </div>
       <div class="flex items-center justify-center gap-2">
         <i class="fa-solid fa-clock"></i>
-        <h1 class="break-words text-left">
+        <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left">
           {{
             new Date(place.location.localtime).toLocaleString('en-US', {
               hour: '2-digit',
@@ -193,7 +193,7 @@ const removePlace = (placeName) => {
 
     <!-- weather info card -->
     <Transition name="fade">
-      <div v-show="showDetail" class="absolute inset-0 z-20">
+      <div v-show="showDetail" class="absolute inset-0 z-20 p-4">
         <WeatherInfo
           :place="place"
           @close-info="showDetail = false"
