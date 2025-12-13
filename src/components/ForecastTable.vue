@@ -2,27 +2,49 @@
 defineProps({
   days: {
     type: Array,
-    default: () => []
+    default: () => [],
   },
   tzId: {
     type: String,
-    required: true // pass place.location.tz_id from parent
+    required: true, // pass place.location.tz_id from parent
   },
   textClass: {
     type: String,
-    default: 'text-white'
-  }
+    default: 'text-white',
+  },
+  fallback: {
+    type: Boolean,
+    default: false,
+  },
 })
 </script>
 
 <template>
   <div class="bg-white/10 rounded-lg p-6 mt-6 shadow-lg">
-    <h2 class="text-xl font-semibold mb-4" :class="textClass">5‑Day Forecast</h2>
-    <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
+    <!-- Dynamic heading -->
+    <h2 class="text-xl font-semibold mb-4" :class="textClass">{{ days.length }}-Day Forecast</h2>
+
+    <!-- Fallback banner -->
+    <div
+      v-if="fallback"
+      class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded mb-4"
+    >
+      Showing 3‑day forecast (5‑day data unavailable).
+    </div>
+
+    <!-- Dynamic grid: show up to 5 if available, otherwise whatever length -->
+    <div
+      :class="[
+        'grid gap-4 grid-cols-1 sm:grid-cols-2',
+        days.length >= 5 ? 'sm:grid-cols-2 md:grid-cols-5' : 'sm:grid-cols-2 md:grid-cols-3',
+      ]"
+      role="group"
+    >
       <div
-        v-for="(day, index) in days.slice(0,5)"
+        v-for="(day, index) in days"
         :key="day.date"
         class="bg-white/20 rounded-lg p-4 text-center flex flex-col items-center"
+        :aria-label="`Forecast for ${new Date(day.date_epoch * 1000).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: tzId })}`"
       >
         <!-- Date / Today Label -->
         <p class="text-sm font-medium text-100 mb-2" :class="textClass">
