@@ -110,7 +110,7 @@ const removePlace = (placeName) => {
       backgroundClass,
       'bg-cover bg-center transition-all duration-500 p-6 rounded-lg shadow-lg gap-6 mt-5 mb-0 relative overflow-hidden flex flex-col',
     ]"
-    class="h-[675px] sm:h-[700px] md:h-[725px] lg:h-[750px]"
+    class="h-[750px] sm:h-[600px] md:h-[800px] lg:h-[750px]"
   >
     <!-- Favorites Button -->
     <div class="flex justify-start mb-1">
@@ -123,15 +123,17 @@ const removePlace = (placeName) => {
     </div>
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 max-w-full">
-      <!-- Location & time -->
-      <div class="flex items-center justify-center gap-2">
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 w-full">
+      <!-- Location -->
+      <div class="flex items-center justify-center gap-2 w-full sm:w-1/2">
         <i class="fa-solid fa-location-dot"></i>
         <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left line-clamp-2">
           {{ place.location.name }}
         </h1>
       </div>
-      <div class="flex items-center justify-center gap-2">
+
+      <!-- Date -->
+      <div class="flex items-center justify-center gap-2 w-full sm:w-1/2">
         <i class="fa-solid fa-clock"></i>
         <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left">
           {{
