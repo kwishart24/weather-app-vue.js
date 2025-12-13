@@ -107,17 +107,11 @@ watch(
     console.log('New day prop:', newDay) //debug
 
     if (newDay && Array.isArray(newDay.hour)) {
-      console.log('Hour array:', newDay.hour) // <-- debug log
-
       chartData.value.data.labels = newDay.hour.map((h) =>
         new Date(h.time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }),
       )
       chartData.value.data.datasets[0].data = newDay.hour.map((h) => h.temp_f)
       chartData.value.data.datasets[1].data = newDay.hour.map((h) => h.precip_in)
-
-      console.log('Labels:', chartData.value.data.labels) // <-- debug log
-      console.log('Temps:', chartData.value.data.datasets[0].data) // <-- debug log
-      console.log('Rain:', chartData.value.data.datasets[1].data) // <-- debug log
 
       loaded.value = true
     }
