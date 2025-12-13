@@ -49,7 +49,7 @@ const getWeather = async (id) => {
     //First attempt: 5-day forecast
     const res =
       await fetch(`https://api.weatherapi.com/v1/forecast.json?key=a675400710724a4ea77230557250312&q=id:${id}&days=5&aqi=no&alerts=no
-`)
+      `)
 
     if (!res.ok) {
       throw new Error(`Forecast failed: ${res.status} ${res.statusText}`)

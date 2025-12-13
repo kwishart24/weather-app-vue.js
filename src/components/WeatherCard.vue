@@ -100,17 +100,12 @@ const removePlace = (placeName) => {
 </script>
 
 <template>
-  <!-- <div
-    :class="place.current.is_day === 1 ? 'bg-day' : 'bg-night'"
-    class="text-white p-10 rounded-lg shadow-lg gap-6 mb-6 relative overflow-hidden"
-  > -->
-
   <div
     :class="[
       backgroundClass,
       'bg-cover bg-center transition-all duration-500 p-6 rounded-lg shadow-lg gap-6 mt-5 mb-0 relative overflow-hidden flex flex-col',
     ]"
-    class="h-[750px] sm:h-[600px] md:h-[800px] lg:h-[750px]"
+    class="h-[750px] sm:h-[700px] md:h-[800px] lg:h-[750px]"
   >
     <!-- Favorites Button -->
     <div class="flex justify-start mb-1">
@@ -123,7 +118,9 @@ const removePlace = (placeName) => {
     </div>
 
     <!-- Header -->
-    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 w-full">
+    <div
+      class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 w-full h-[60px] sm:h-[70px] md:h-[80px] lg:h-[90px]"
+    >
       <!-- Location -->
       <div class="flex items-center justify-center gap-2 w-full sm:w-1/2">
         <i class="fa-solid fa-location-dot"></i>
@@ -147,7 +144,12 @@ const removePlace = (placeName) => {
     </div>
 
     <!-- Navigation -->
-    <ForecastNav v-model="activeSection" :class="navTextClass" class="mb-8" />
+    <ForecastNav
+      v-model="activeSection"
+      :class="navTextClass"
+      class="mb-8"
+      :forecastDays="place.forecast.forecastday.length"
+    />
 
     <!-- Section content -->
     <div class="flex flex items-center justify-center">
@@ -205,7 +207,7 @@ const removePlace = (placeName) => {
     </Transition>
 
     <!-- Footer buttons -->
-    <div class="mt-auto flex justify-between items-center pt-4">
+    <div class="mt-auto flex justify-between items-center pt-4 mb-5">
       <!-- weather info btn -->
       <div v-if="activeSection === 'today'" class="p-2">
         <button @click="showDetail = true">
