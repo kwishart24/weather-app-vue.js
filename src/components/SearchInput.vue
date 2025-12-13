@@ -7,34 +7,57 @@ const searchTerm = reactive({
   query: '',
   timeout: null,
   results: null,
+  error: null,
 })
 
 const handleSearch = () => {
   clearTimeout(searchTerm.timeout)
   searchTerm.timeout = setTimeout(async () => {
     if (searchTerm.query !== '') {
-      const res =
-        await fetch(`https://api.weatherapi.com/v1/search.json?key=a675400710724a4ea77230557250312&q=${searchTerm.query}
+      try {
+        const res =
+          await fetch(`https://api.weatherapi.com/v1/search.json?key=a675400710724a4ea77230557250312&q=${searchTerm.query}
         `)
 
-      const data = await res.json()
-      searchTerm.results = data
+        if (!res.ok) {
+          throw new Error(`Search failed: ${res.status} ${res.statusText}`)
+        }
+
+        const data = await res.json()
+        searchTerm.results = data
+        searchTerm.error = null
+      } catch (err) {
+        console.error(err)
+        searchTerm.results = null
+        searchTerm.error = 'Unable to fetch search results. Please try again.'
+      }
     } else {
       searchTerm.results = null
+      searchTerm.error = null
     }
   }, 500)
 }
 
 const getWeather = async (id) => {
-  const res =
-    await fetch(`https://api.weatherapi.com/v1/forecast.json?key=a675400710724a4ea77230557250312&q=id:${id}&days=5&aqi=no&alerts=no
+  try {
+    const res =
+      await fetch(`https://api.weatherapi.com/v1/forecast.json?key=a675400710724a4ea77230557250312&q=id:${id}&days=5&aqi=no&alerts=no
 `)
-  const data = await res.json()
 
-  emit('place-data', data)
+    if (!res.ok) {
+      throw new Error(`Forecast failed: ${res.status} ${res.statusText}`)
+    }
+    const data = await res.json()
 
-  searchTerm.query = ''
-  searchTerm.results = null
+    emit('place-data', data)
+
+    searchTerm.query = ''
+    searchTerm.results = null
+    searchTerm.error = null
+  } catch (err) {
+    console.error(err)
+    searchTerm.error = 'Unable to fetch 5-day forecast. Please try again later.'
+  }
 }
 </script>
 
