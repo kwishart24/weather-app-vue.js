@@ -49,9 +49,11 @@ const setActive = (section) => {
     </button>
 
     <!-- Multi-Day Forecast -->
-    <button 
+    <button
       v-if="props.forecastDays > 1"
-      class="flex flex-col items-center group cursor-pointer" @click="setActive('fiveDay')">
+      class="flex flex-col items-center group cursor-pointer"
+      @click="setActive('fiveDay')"
+    >
       <i
         class="fa-solid fa-calendar-days text-4xl transition-transform duration-200 group-hover:scale-125 group-hover:text-green-500"
         :class="{ 'text-green-500 scale-125': props.modelValue === 'fiveDay' }"
@@ -60,7 +62,7 @@ const setActive = (section) => {
         class="mt-2 text-sm group-hover:text-green-300"
         :class="{ 'text-green-300 font-semibold': props.modelValue === 'fiveDay' }"
       >
-        {{props.forecastDays}}-Day
+        {{ props.forecastDays }}-Day
       </span>
     </button>
   </div>
