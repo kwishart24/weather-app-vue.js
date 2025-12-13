@@ -100,20 +100,22 @@ const removePlace = (placeName) => {
 </script>
 
 <template>
-  <div
+  <article
     :class="[
       backgroundClass,
       'bg-cover bg-center transition-all duration-500 p-6 rounded-lg shadow-lg gap-6 mt-5 mb-0 relative overflow-hidden flex flex-col',
     ]"
     class="h-[750px] sm:h-[700px] md:h-[800px] lg:h-[750px]"
+    aria-labelledby="card-heading"
   >
     <!-- Favorites Button -->
     <div class="flex justify-start mb-1">
       <button
         @click="$emit('save-favorite', place)"
+        aria-label="Save {{ place.location.name }} to favorites"
         class="p-2 transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
       >
-        <i class="fa-solid fa-bookmark"></i> Save
+        <i class="fa-solid fa-bookmark" aria-hidden="true"></i> Save
       </button>
     </div>
 
@@ -123,15 +125,18 @@ const removePlace = (placeName) => {
     >
       <!-- Location -->
       <div class="flex items-center justify-center gap-2 w-full sm:w-1/2">
-        <i class="fa-solid fa-location-dot"></i>
-        <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left line-clamp-2">
+        <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+        <h1
+          id="card-heading"
+          class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left line-clamp-2"
+        >
           {{ place.location.name }}
         </h1>
       </div>
 
       <!-- Date -->
       <div class="flex items-center justify-center gap-2 w-full sm:w-1/2">
-        <i class="fa-solid fa-clock"></i>
+        <i class="fa-solid fa-clock" aria-hidden="true"></i>
         <h1 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl break-words text-left">
           {{
             new Date(place.location.localtime).toLocaleString('en-US', {
@@ -152,12 +157,17 @@ const removePlace = (placeName) => {
     />
 
     <!-- Section content -->
-    <div class="flex flex items-center justify-center">
+    <div class="flex flex items-center justify-center" aria-live="polite">
       <!-- Today -->
       <div v-if="activeSection === 'today'" class="text-center">
+        <h2 class="sr-only">Today’s forecast</h2>
         <!-- current weather -->
         <div v-if="activeSection === 'today'" class="text-center">
-          <img :src="place.current.condition.icon" alt="icon" class="w-32 mx-auto -mb-4" />
+          <img
+            :src="place.current.condition.icon"
+            :alt="place.current.condition.text"
+            class="w-32 mx-auto -mb-4"
+          />
           <h1 class="text-6xl sm:text-8xl md:text-9xl mb-2 ml-2">
             {{ Math.round(place.current.temp_f) }}&deg;
           </h1>
@@ -171,6 +181,7 @@ const removePlace = (placeName) => {
 
       <!-- Hourly -->
       <div v-if="activeSection === 'hourly'" class="w-full flex items-center justify-center">
+        <h2 class="sr-only">Hourly forecast</h2>
         <HourlyChart
           :day="place.forecast.forecastday[0]"
           class="w-4/5 max-w-[1000px]"
@@ -181,6 +192,7 @@ const removePlace = (placeName) => {
 
       <!-- 5-Day -->
       <div v-if="activeSection === 'fiveDay'" class="w-full">
+        <h2 class="sr-only">{{ place.forecast.forecastday.length }}-day forecast</h2>
         <div class="grid grid-rows-5 gap-4 sm:gap-8 text-sm sm:text-base">
           <WeatherForecastDay
             v-for="(day, index) in place.forecast.forecastday.slice(0, 5)"
@@ -190,16 +202,15 @@ const removePlace = (placeName) => {
             :textClass="tableTextClass"
           />
         </div>
-        <!-- <div v-if="activeSection === 'fiveDay'" class="w-full flex items-center justify-center"> -->
-        <!-- <ForecastTable :days="place.forecast.forecastday" :tzId="place.location.tz_id" :textClass="tableTextClass"/> -->
       </div>
     </div>
 
     <!-- weather info card -->
     <Transition name="fade">
-      <div v-show="showDetail" class="absolute inset-0 z-20 p-4">
+      <div v-show="showDetail" class="absolute inset-0 z-20 p-4" role="dialog" aria-modal="true">
         <WeatherInfo
           :place="place"
+          aria-labelledby="weather-info-title"
           @close-info="showDetail = false"
           @remove-place="removePlace(place.location.name)"
         />
@@ -210,28 +221,24 @@ const removePlace = (placeName) => {
     <div class="mt-auto flex justify-between items-center pt-4 mb-5">
       <!-- weather info btn -->
       <div v-if="activeSection === 'today'" class="p-2">
-        <button @click="showDetail = true">
-          More <i class="fa-solid fa-arrow-right text-sm -mb-px"></i>
+        <button @click="showDetail = true" aria-label="Show more weather details">
+          More <i class="fa-solid fa-arrow-right text-sm -mb-px" aria-hidden="true"></i>
         </button>
       </div>
 
       <!-- Trashcan button -->
       <div class="flex justify-end items-center ml-auto">
         <div class="p-2 hover:bg-white/50">
-          <button @click="removePlace(place.location.name)">
-            <i class="fa-solid fa-trash"></i>
+          <button
+            @click="removePlace(place.location.name)"
+            :aria-label="`Remove ${place.location.name}`"
+          >
+            <i class="fa-solid fa-trash" aria-hidden="true"></i>
           </button>
         </div>
       </div>
     </div>
-    <!-- hourly charts -->
-    <!-- <div v-show="showDetail">
-      <HourlyChart
-        v-if="place.forecast && place.forecast.forecastday.length"
-        :day="place.forecast.forecastday[0]"
-      />
-    </div> -->
-  </div>
+  </article>
 </template>
 
 <style scoped>
@@ -268,5 +275,10 @@ const removePlace = (placeName) => {
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
+}
+
+button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 </style>

@@ -51,6 +51,9 @@ const getWeather = async (id) => {
       await fetch(`https://api.weatherapi.com/v1/forecast.json?key=a675400710724a4ea77230557250312&q=id:${id}&days=5&aqi=no&alerts=no
       `)
 
+    // await fetch(`https://api.weatherapi.com/v1/forecast.json?key=''&q=id:${id}&days=5&aqi=no&alerts=no
+    // `)
+
     if (!res.ok) {
       throw new Error(`Forecast failed: ${res.status} ${res.statusText}`)
     }
@@ -97,21 +100,36 @@ const getWeather = async (id) => {
 <template>
   <div>
     <!-- search field -->
-    <form>
+    <form role="search" aria-label="Weather location search">
+      <!-- Accessible but visually hidden label -->
+      <label for="search" class="sr-only"> Enter a city or location </label>
       <div class="bg-white border border-indigo-600/30 rounded-lg shadow-lg flex items-center">
         <i class="fa-solid fa-magnifying-glass p-2 text-indigo-600 mr-3"></i>
         <input
           type="text"
           placeholder="Search for a place"
+          id="search"
+          aria-required="true"
+          aria-describedby="search-help"
+          :aria-expanded="searchTerm.results !== null"
+          aria-controls="search-suggestions"
           class="rounded-r-lg p-2 border-0 outline-0 focus:ring-2 focus:ring-indigo-600 ring-inset w-full"
           v-model="searchTerm.query"
           @input="handleSearch"
         />
+        <p id="search-help" class="sr-only">
+          Type the name of a city or location to get forecast data
+        </p>
       </div>
     </form>
 
     <!-- loading spinner -->
-    <div v-if="searchTerm.loading" class="flex items-center mt-2 text-indigo-600">
+    <div
+      v-if="searchTerm.loading"
+      class="flex items-center mt-2 text-indigo-600"
+      role="status"
+      aria-live="polite"
+    >
       <svg
         class="animate-spin h-5 w-5 mr-2 text-indigo-600"
         xmlns="http://www.w3.org/2000/svg"
@@ -132,7 +150,7 @@ const getWeather = async (id) => {
     </div>
 
     <!-- error message -->
-    <div v-if="searchTerm.error" class="text-red-600 mt-2">
+    <div v-if="searchTerm.error" class="text-red-600 mt-2" role="alert">
       {{ searchTerm.error }}
     </div>
 
@@ -140,17 +158,25 @@ const getWeather = async (id) => {
     <div
       v-if="searchTerm.fallback"
       class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-2 rounded mt-2"
+      role="status"
+      aria-live="polite"
     >
       Showing 3‑day forecast (5‑day unavailable).
     </div>
 
     <!-- search suggestions -->
     <div class="bg-white my-2 rounded-lg shadow-lg">
-      <div v-if="searchTerm.results !== null">
-        <div v-for="place in searchTerm.results" :key="place.id">
+      <div
+        v-if="searchTerm.results !== null"
+        aria-label="Search suggestions"
+        id="search-suggestions"
+        role="listbox"
+      >
+        <div v-for="place in searchTerm.results" :key="place.id" role="option">
           <button
             @click="getWeather(place.id)"
             class="px-3 my-2 hover:text-indigo-600 hover:font-bold w-full text-left"
+            :aria-label="`Get forecast for ${place.name}, ${place.region}, ${place.country}`"
           >
             {{ place.name }}, {{ place.region }}, {{ place.country }}
           </button>

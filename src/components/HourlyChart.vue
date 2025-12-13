@@ -122,11 +122,59 @@ watch(
 </script>
 
 <template>
-  <div>
+  <figure
+    role="group"
+    aria-labelledby="hourly-chart-title"
+    aria-describedby="hourly-chart-desc"
+    class="relative"
+    tabindex="0"
+  >
+    <!-- Accessible title -->
+    <h3 id="hourly-chart-title" class="sr-only">Hourly Weather Chart</h3>
+
+    <!-- Chart itself -->
     <Chart
       v-if="chartData.data.labels.length"
       :data="chartData.data"
       :options="chartData.options"
+      role="img"
+      aria-label="Line chart of hourly temperature and bar chart of hourly rainfall"
     />
-  </div>
+
+    <!-- Accessible description -->
+    <figcaption id="hourly-chart-desc" class="sr-only">
+      This chart shows hourly temperature in degrees Fahrenheit as a line, and hourly rainfall in
+      inches as bars.
+    </figcaption>
+  </figure>
+
+  <!-- Screen reader only table -->
+  <table class="sr-only" aria-labelledby="hourly-chart-title">
+    <caption>
+      Hourly forecast data table
+    </caption>
+    <thead>
+      <tr>
+        <th scope="col">Hour</th>
+        <th scope="col">Temperature (°F)</th>
+        <th scope="col">Rainfall (inches)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(hour, i) in props.day.hour" :key="i">
+        <td>
+          {{ new Date(hour.time).toLocaleTimeString('en-US', { hour: 'numeric', hour12: true }) }}
+        </td>
+        <td>{{ Math.round(hour.temp_f) }}</td>
+        <td>{{ hour.precip_in }}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
+
+<style scoped>
+:focus-within {
+  outline: 2px solid #2563eb;
+  outline-offset: 4px;
+}
+</style>

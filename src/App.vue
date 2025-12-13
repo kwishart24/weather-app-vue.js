@@ -44,27 +44,32 @@ const deleteFavorite = (name) => {
 </script>
 
 <template>
-  <main>
+  <main aria-labelledby="app-title">
+    <!-- Screen reader title -->
+    <h1 id="app-title" class="sr-only">Weather App</h1>
     <!-- Favorites Button -->
     <div class="flex justify-end p-2">
       <button
         @click="showSidebar = true"
+        aria-label="Open favorites list"
         class="p-4 font-bold rounded-md transition-transform duration-300 hover:scale-105 hover:shadow-lg cursor-pointer"
       >
-        <i class="fa-solid fa-bookmark"></i>Favorites
+        <i class="fa-solid fa-bookmark" aria-hidden="true"></i>Favorites
       </button>
     </div>
 
     <!-- Date -->
     <div class="text-center mb-6">
-      {{
-        new Date().toLocaleString('en-us', {
-          weekday: 'long',
-          year: 'numeric',
-          month: 'long',
-          day: 'numeric',
-        })
-      }}
+      <h2 aria-label="Current date">
+        {{
+          new Date().toLocaleString('en-us', {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+          })
+        }}
+      </h2>
     </div>
 
     <!-- Search -->
@@ -75,12 +80,28 @@ const deleteFavorite = (name) => {
     <!-- Weather Cards -->
     <div class="grid gap-6 p-4 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
       <div v-for="(place, idx) in places" :key="idx">
-        <WeatherCard :place="place" @delete-place="deletePlace" @save-favorite="saveFavorite" />
+        <section aria-labelledby="cards-heading">
+          <!-- For Screen readers only -->
+          <h2 id="cards-heading" class="sr-only">Weather cards</h2>
+          <WeatherCard :place="place" @delete-place="deletePlace" @save-favorite="saveFavorite" />
+        </section>
       </div>
     </div>
 
     <!-- Favorites List -->
-    <aside>
+    <aside
+      v-if="showSidebar"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="favorites-heading"
+      aria-describedby="favorites-desc"
+    >
+      <!-- Screen Reader Header -->
+      <h2 id="favorites-heading" class="sr-only">Favorites list</h2>
+      <p id="favorites-desc" class="sr-only">
+        Select a favorite location to view its weather card or delete it from the list.
+      </p>
+
       <FavoritesList
         v-if="showSidebar"
         :favorites="favorites"
@@ -101,5 +122,10 @@ const deleteFavorite = (name) => {
 .slide-enter-from,
 .slide-leave-to {
   transform: translateX(100%);
+}
+
+button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
 }
 </style>
